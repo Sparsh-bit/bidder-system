@@ -4,7 +4,9 @@ import { Auction, AIAgent } from '../types/auction.types';
 import { useAuth } from '../contexts/AuthContext';
 import socket from '../lib/socket';
 
-const API_BASE = 'http://127.0.0.1:5000/api/auction';
+import { API_BASE_URL } from '../utils/config';
+
+const API_BASE = `${API_BASE_URL}/api/auction`;
 
 interface UseAuctionResult {
   auctions: Auction[];

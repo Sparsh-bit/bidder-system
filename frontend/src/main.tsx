@@ -12,6 +12,10 @@ if ('serviceWorker' in navigator) {
 
 import { ErrorBoundary } from './components/ErrorBoundary'
 
+import { API_BASE_URL } from './utils/config';
+
+console.log('🚀 App Starting. API_BASE_URL:', API_BASE_URL);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ErrorBoundary>

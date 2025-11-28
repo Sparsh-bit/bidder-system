@@ -45,7 +45,28 @@ function AppNavigator() {
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
+import { API_BASE_URL } from './src/lib/config';
+import { useEffect } from 'react';
+import { Alert } from 'react-native';
+
 export default function App() {
+    useEffect(() => {
+        const checkHealth = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/health`);
+                const data = await res.json();
+                console.log('Backend Health:', data);
+            } catch (err) {
+                console.error('Backend unreachable:', err);
+                Alert.alert(
+                    'Connection Error',
+                    `Cannot connect to backend at ${API_BASE_URL}.\n\nEnsure the server is running and your device is on the same network.`
+                );
+            }
+        };
+        checkHealth();
+    }, []);
+
     return (
         <SafeAreaProvider>
             <StatusBar style="light" backgroundColor="black" />

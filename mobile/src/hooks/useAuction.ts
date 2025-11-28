@@ -4,7 +4,9 @@ import { useAuth } from '../context/AuthContext';
 import socket from '../lib/socket';
 
 // Use 10.0.2.2 for Android Emulator, or your LAN IP for physical device
-const API_BASE = 'http://10.0.2.2:5000/api/auction';
+import { API_BASE_URL } from '../lib/config';
+
+const API_BASE = `${API_BASE_URL}/api/auction`;
 
 interface UseAuctionResult {
     auctions: Auction[];

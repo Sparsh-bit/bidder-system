@@ -2,7 +2,9 @@
 
 import { Auction, AIAgent, Bid, BackendAIBidResponse } from '../types/auction.types';
 
-const API_BASE = 'http://127.0.0.1:5000/api/auction';
+import { API_BASE_URL } from '../utils/config';
+
+const API_BASE = `${API_BASE_URL}/api/auction`;
 
 export class AIBidder {
   private activeBidders: Map<string, NodeJS.Timeout> = new Map();
@@ -50,7 +52,7 @@ export class AIBidder {
           current_price: auction.currentPrice,
           increment: auction.increment,
           remaining_budget: agent.remainingBudget,
-          time_left: Math.max(0, auction.endTime - Date.now()),
+          time_left: Math.max(0, Number(auction.endTime) - Date.now()),
         };
 
         try {

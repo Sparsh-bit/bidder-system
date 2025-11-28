@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Create Flask app
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Initialize Supabase Client (optional check)
 from backend.utils.supabase_client import supabase
@@ -61,12 +61,24 @@ def on_disconnect():
 
 # Now import and register blueprints AFTER socketio/app exist
 # Make sure your auction routes import socketio from this module when they need to emit.
-from backend.routes.auction_routes import auction_bp  # noqa: E402
+# Now import and register blueprints AFTER socketio/app exist
+from backend.routes.auction_routes import auction_bp
+from backend.routes.auth_routes import auth_bp
+from backend.routes.agent_routes import agent_bp
 
 app.register_blueprint(auction_bp, url_prefix='/api/auction')
+app.register_blueprint(auth_bp, url_prefix='/api/user')
+app.register_blueprint(agent_bp, url_prefix='/api/agent')
+
+@app.route('/health', methods=['GET'])
+def health():
+    return {"status": "ok", "message": "backend reachable"}
 
 
 if __name__ == '__main__':
+    # Allow running from backend/ directory by adding parent to sys.path
+    import sys
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
     # Use socketio.run to serve app with SocketIO support
-    # For development this is fine. In production you should run under eventlet or gevent.
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 8000)), debug=True)

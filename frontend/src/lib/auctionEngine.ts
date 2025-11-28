@@ -1,6 +1,8 @@
 import { Auction, Bid, BackendAuctionResponse, BackendBidResponse } from '../types/auction.types';
 
-const API_BASE = 'http://127.0.0.1:5000/api/auction';
+import { API_BASE_URL } from '../utils/config';
+
+const API_BASE = `${API_BASE_URL}/api/auction`;
 
 export class AuctionEngine {
   private auctions: Map<string, Auction> = new Map();
@@ -109,7 +111,7 @@ export class AuctionEngine {
       this.auctions.set(auctionId, auction);
       onUpdate(auction);
 
-      const remainingTime = auction.endTime - Date.now();
+      const remainingTime = Number(auction.endTime) - Date.now();
       if (remainingTime > 0) {
         const timer = setTimeout(() => {
           this.endAuction(auctionId, onUpdate);
