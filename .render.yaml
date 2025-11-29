@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: bidder-backend
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: SUPABASE_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+  - type: web
+    name: bidder-frontend
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
